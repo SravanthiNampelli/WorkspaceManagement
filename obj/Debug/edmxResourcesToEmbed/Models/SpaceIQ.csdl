@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SpaceIQDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tblEmployees">
+    <Key>
+      <PropertyRef Name="EmpId" />
+    </Key>
+    <Property Name="EmpId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmpName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <Property Name="WorkspaceId" Type="Int32" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <Property Name="Password" Type="Binary" MaxLength="64" FixedLength="true" Nullable="false" />
+    <NavigationProperty Name="Role" Relationship="Self.FK__Employees__Modif__3C69FB99" FromRole="Employees" ToRole="Roles" />
+    <NavigationProperty Name="Workspace" Relationship="Self.FK__Employees__Works__3D5E1FD2" FromRole="Employees" ToRole="Workspaces" />
+  </EntityType>
+  <EntityType Name="tblRoles">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Employees" Relationship="Self.FK__Employees__Modif__3C69FB99" FromRole="Roles" ToRole="Employees" />
+  </EntityType>
+  <EntityType Name="tblWorkspaces">
+    <Key>
+      <PropertyRef Name="WorkspaceId" />
+    </Key>
+    <Property Name="WorkspaceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WorkspaceNumber" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IsOccupied" Type="Int32" Nullable="false" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <Property Name="ModifiedDate" Type="DateTime" />
+    <NavigationProperty Name="Employees" Relationship="Self.FK__Employees__Works__3D5E1FD2" FromRole="Workspaces" ToRole="Employees" />
+  </EntityType>
+  <Association Name="FK__Employees__Modif__3C69FB99">
+    <End Role="Roles" Type="SpaceIQDBModel.tblRoles" Multiplicity="1" />
+    <End Role="Employees" Type="SpaceIQDBModel.tblEmployees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="Employees">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Employees__Works__3D5E1FD2">
+    <End Role="Workspaces" Type="SpaceIQDBModel.tblWorkspaces" Multiplicity="0..1" />
+    <End Role="Employees" Type="SpaceIQDBModel.tblEmployees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Workspaces">
+        <PropertyRef Name="WorkspaceId" />
+      </Principal>
+      <Dependent Role="Employees">
+        <PropertyRef Name="WorkspaceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SpaceIQDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblEmployees" EntityType="SpaceIQDBModel.tblEmployees" />
+    <EntitySet Name="tblRoles" EntityType="SpaceIQDBModel.tblRoles" />
+    <EntitySet Name="tblWorkspaces" EntityType="SpaceIQDBModel.tblWorkspaces" />
+    <AssociationSet Name="FK__Employees__Modif__3C69FB99" Association="Self.FK__Employees__Modif__3C69FB99">
+      <End Role="Roles" EntitySet="tblRoles" />
+      <End Role="Employees" EntitySet="tblEmployees" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Employees__Works__3D5E1FD2" Association="Self.FK__Employees__Works__3D5E1FD2">
+      <End Role="Workspaces" EntitySet="tblWorkspaces" />
+      <End Role="Employees" EntitySet="tblEmployees" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

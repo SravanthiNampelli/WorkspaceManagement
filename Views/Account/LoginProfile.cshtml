@@ -1,0 +1,46 @@
+﻿@model  SpaceIQ.Employee
+
+@{
+    ViewBag.Title = "LoginProfile";
+}
+
+
+<div class=" d-flex justify-content-center align-items-center ">
+    <h2 class="mt-5">User Profile</h2>
+</div>
+<br />
+
+@using (Html.BeginForm("Logout", "Account"))
+{
+    @Html.AntiForgeryToken()
+    <div class="row d-flex justify-content-center align-items-center h-100 ">
+        <div class="col-md-12 col-xl-4">
+            <div class="card" style="border-radius: 15px; background-color:lightblue" >
+                <div class="card-body text-center">
+                    <div class="mt-3 mb-4">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo2CuaqxZ3cysnHFEknblSY8ZhqIOovAjK2Q&usqp=CAU"
+                             class="rounded-circle img-fluid" style="width: 60px; height:60px" />
+                    </div> 
+                    <h4>@Model.EmpName</h4>
+                    <label><b>Email :</b></label><p>@Model.Email</p>
+                    <label><b>Role :</b></label><p>@Model.Role.RoleType</p>
+                    @if (@Model.Workspace != null)
+                    {
+                        <label><b>Workspace Number :</b></label><p>@Model.Workspace.WorkspaceNumber</p>
+                    }
+                    else
+                    {
+                        <label><b>Workspace Number :</b></label><p>Not yet assigned</p>
+                    }
+                <button class="btn btn-danger" onclick="return confirm('Click OK to logout or Cancel to stay logged in.');">
+                    Logout
+                </button> </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+}
+

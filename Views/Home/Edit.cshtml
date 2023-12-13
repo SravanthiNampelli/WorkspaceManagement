@@ -1,0 +1,72 @@
+﻿@model SpaceIQ.ViewModels.EditViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="row">
+    @*<div class="col-md-5 mt-5 ">
+        <button class="btn btn-primary">Go back</button>
+    </div>*@
+    <div class="col-md-12">
+        <div class="d-flex justify-content-center align-content-center mt-5 ">
+            <h2>Edit Workspace</h2>
+        </div>
+    </div>
+</div>
+
+<br />
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @*Alert message*@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-info alert-dismissable fade show col-3 position-fixed" role="alert">
+            @TempData["SuccessMessage"].ToString()
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ></button>
+        </div>
+
+    }
+
+    @*//Edit form*@
+    <div class="d-flex justify-content-center align-content-center">
+        <div class="card p-5 " style="background-color:wheat">
+            @using (Html.BeginForm("Edit", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.EmpId)
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><b>Employee Id</b></label>
+                    @Html.DisplayFor(model => model.EmpId)
+                </div>
+
+                <div class="form-group mb-3 ">
+                    <label class="form-label"><b>Employee Name</b></label>
+                    @Html.DisplayFor(model => model.EmpName)
+
+                </div>
+                <div class="form-group mb-3 ">
+                    <label class="form-label"><b>Previous Workspace</b></label>
+                    @Html.DisplayFor(model => model.WorkspaceNumber)
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label"><b>Workspace Options</b></label>
+                    @Html.DropDownListFor(model => model.SelectedWorkspace, Model.WorkspaceOptions, "Select a workspace", new { @class = "form-select" , @required = "required" })
+                    @Html.ValidationMessageFor(model => model.SelectedWorkspace,"", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group d-flex justify-content-center align-content-center">
+                    <input type="submit" value="Save Changes" class="btn btn-primary " />
+                </div>
+            }
+        </div>
+    </div>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</body>

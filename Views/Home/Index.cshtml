@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="mt-5 d-flex align-content-md-center  justify-content-center col-md-4">
+    <h3>The Workplace Operations Platform</h3>
+
+
+</div>
+
+@*<div class="d-flex justify-content-start align-content-start col-md-6">
+        <p>
+            Make SpaceIQ your workplace technology partner as the business world reopens its doors. Our industry-leading software solutions provide employees the tools they need to manage how, when, and where they work. We help employers reimagine their workplaces with actionable data and set sound real estate strategies now and in the future.
+        </p>
+    </div>*@
+@if (Session["username"] == null)
+{
+    <div class="d-flex justify-content-start align-content-start col-md-6">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("Login", "Account")'">Get Started</button>
+    </div>
+}
+
+<div class="d-flex align-content-md-end  justify-content-end col-6">
+    <img src="https://roommanager.com/wp-content/uploads/2023/04/File-07.04.23-11-35-22-1536x1024.jpg" height="300" width="600" />
+</div>

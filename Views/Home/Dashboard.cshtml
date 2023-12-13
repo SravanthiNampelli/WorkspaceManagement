@@ -1,0 +1,144 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<SpaceIQ.Employee>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Dashboard";
+    WebGrid webGrid = new WebGrid(source: Model, canSort: false, canPage: false);
+
+}
+
+
+@*Searchbox*@
+@using (Html.BeginForm(FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+    if (User.IsInRole("Admin"))
+    {
+        <div class="d-flex justify-content-center align-content-center mt-5">
+            <h2>Admin Dashboard</h2>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center align-content-center mt-5">
+            <h2>Employee Dashboard</h2>
+        </div>
+
+    }
+    <div class="input-group d-flex justify-content-start align-content-start   ">
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control rounded", @placeholder = "Search by employee name" })
+        <button type="submit" class="btn btn-primary" style="background-color:black">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+        </button>
+    </div>
+    <br />
+}
+
+@if (User.IsInRole("Admin"))
+{
+<div class="row">
+    <div class="col-md-6">
+        <p><b>Note : </b>Sort the table by clicking on the column headings below</p>
+    </div>
+    <div class="col-md-6 d-flex justify-content-end align-content-end">
+        @using (Html.BeginForm("Export", "Export", FormMethod.Post))
+        {
+            <button class="btn btn-dark" type="submit">Export to CSV</button>
+        }
+    </div>
+</div>
+}
+<div class="d-flex justify-content-end align-content-end">
+
+</div>
+
+<div></div>
+
+@*No data found*@
+@if (ViewData["NoDataFound"] != null)
+{
+    <div style="color:red; font-size:25px" class="d-flex justify-content-center align-content-center">
+        @ViewData["NoDataFound"]
+    </div>
+}
+else
+{
+    <table class="table" border="1">
+        @*Table headings*@
+        <thead>
+            <tr>
+                <th>
+                    @Html.ActionLink("Employee Id", "Dashboard", new { sortOrder = ViewBag.IdSortParam, currentFilter = ViewBag.CurrentFilter }, new { style = "text-decoration:none; color:black;" })
+
+                </th>
+                <th>
+                    @Html.ActionLink("Employee Name", "Dashboard", new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter }, new { style = "text-decoration:none; color:black;" })
+                </th>
+                <th>
+                    @Html.ActionLink("Workspace Number", "Dashboard", new { sortOrder = ViewBag.WorkspaceIdSortParam, currentFilter = ViewBag.CurrentFilter }, new { style = "text-decoration:none; color:black;" })
+                </th>
+            </tr>
+        </thead>
+
+        <tbody class="align-content-md-center">
+            @foreach (var employee in Model)
+            {
+                //yet to assign a workspace
+                if (employee.Workspace == null)
+                {
+                    <tr>
+                        <td style="background-color: #FFB6C1 ">@employee.EmpId</td>
+                        <td style="background-color: #FFB6C1 ">@employee.EmpName</td>
+                        <td style="background-color: #FFB6C1 "> Not yet assigned </td>
+                        <td style="background-color: #FFB6C1 ">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <button class="btn " style="color: white; background-color: black " onclick="window.location.href='@Url.Action("Assign", "Home")?EmpId=@employee.EmpId'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0" />
+                                    </svg>
+
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+                //workspace assigned already
+                else
+                {
+
+                    <tr>
+                        <td style="background-color: #428bca">@employee.EmpId</td>
+                        <td style="background-color: #428bca ">@employee.EmpName</td>
+                        <td align="left" style="background-color: #428bca ">@employee.Workspace.WorkspaceNumber </td>
+                        <td style="background-color: #428bca ">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <button class="btn " style="color: white; background-color: black " onclick="window.location.href='@Url.Action("Edit", "Home")?EmpId=@employee.EmpId'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
+                                    </svg>
+
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+}
+
+<div class="fixed-bottom d-flex justify-content-center align-content-center">
+    @Html.PagedListPager(Model, page => Url.Action("Dashboard",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>
+
+
+
+
+
+

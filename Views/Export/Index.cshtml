@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SpaceIQ.Employee>
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    Layout = null;
+    WebGrid webGrid = new WebGrid(source: Model, canSort: false, canPage: false);
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <h4>Customers</h4>
+    <hr />
+    <div id="Grid" style="visibility:hidden">
+        @webGrid.GetHtml(
+        htmlAttributes: new { @id = "WebGrid" },
+        columns: webGrid.Columns(
+        webGrid.Column("EmpId", "Customer Id"),
+        webGrid.Column("EmpName", "Customer Name"),
+        webGrid.Column("Email", "City"),
+        webGrid.Column("Workspace.WorkspaceNumber", "Workspace Number",
+            format: (item) => item.Workspace != null ? item.Workspace.WorkspaceNumber : "N/A")
+    ));
+    </div>
+    <br />
+    <br />
+    @using (Html.BeginForm("Export", "Export", FormMethod.Post))
+    {
+        <input type="submit" id="btnSubmit" value="Export" />
+    }
+</body>
+</html>
+
