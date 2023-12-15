@@ -83,7 +83,6 @@ namespace SpaceIQ.Controllers
             Response.Cache.AppendCacheExtension("no-store, must-revalidate");
             Response.AppendHeader("Pragma", "no-cache");
             Response.AppendHeader("Expires", "0");
-
             return View();
         }
 
@@ -91,7 +90,7 @@ namespace SpaceIQ.Controllers
         [Authorize]
         public ActionResult LoginProfile()
         {
-           
+          
                 if (Session["Username"] != null)
                 {
                     string username = Session["Username"].ToString();

@@ -17,7 +17,7 @@ namespace SpaceIQ.Controllers
         {
             return View();
         }
-
+        
         [Authorize]
         public ActionResult Dashboard(string sortOrder, string currentFilter, string searchString, int? page)
         {
@@ -71,7 +71,7 @@ namespace SpaceIQ.Controllers
                     employees = employees.OrderBy(s => s.WorkspaceId);
                     break;
             }
-            int pageSize = 6;
+            int pageSize = 4;
             int pageNumber = (page ?? 1);
             return View(employees.ToPagedList(pageNumber, pageSize));
 
@@ -267,6 +267,6 @@ namespace SpaceIQ.Controllers
             {
                 ViewName = "Error"
             };
-        }
+        }    
     }
 }
