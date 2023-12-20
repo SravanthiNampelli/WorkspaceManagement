@@ -1,9 +1,16 @@
 ﻿@model SpaceIQ.ViewModels.LoginViewModel
 @{
     ViewBag.Title = "Login";
+    string _googlesitekey = System.Configuration.ConfigurationManager.AppSettings["GoogleSitekey"];
 
 }
 @Styles.Render("~/Content/css")
+
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<!-- Add the reCAPTCHA widget to your form -->
+
 
 @using (Html.BeginForm())
 {
@@ -17,7 +24,7 @@
                 </div>
 
                 <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-                    <form>
+                    <form id="form">
 
                         <div class="form-outline mb-4">
                             <label class="form-label"><b>Email address</b></label>
@@ -39,7 +46,13 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+                        <div class="form-group mb-3">
+                            <div class="g-recaptcha" data-sitekey=@_googlesitekey></div>
+                            @Html.ValidationMessage("Recaptcha")
+
+                        </div>
+
+                        <button id="btn" type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
 
                     </form>
                 </div>
@@ -47,6 +60,21 @@
         </div>
     </section>
 }
+
+
+<script>
+    function isRecaptchaChecked() {
+        return document.getElementById("g-recaptcha-response") != null &&
+            document.getElementById("g-recaptcha-response").value.trim() !== "";
+    }
+
+    document.getElementById("btn").addEventListener("click", function (event) {
+        if (!isRecaptchaChecked()) {
+            alert("Please complete the reCAPTCHA.");
+            event.preventDefault();
+        }
+});
+</script>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
