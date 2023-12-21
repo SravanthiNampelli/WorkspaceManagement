@@ -195,6 +195,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="dark-theme-svgrepo-com.svg" />
     <Content Include="favicon.ico" />
+    <Content Include="file_download_icon_136641.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.bundle.js" />
